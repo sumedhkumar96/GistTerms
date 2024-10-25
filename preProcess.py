@@ -1,5 +1,5 @@
-import re
 import os
+import re
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import sent_tokenize
@@ -21,7 +21,7 @@ def extract_legal_phrases(text):
         if len(chunk.text.split()) > 1:  # Keep multi-word expressions
             legal_phrases.add(chunk.text)
     for ent in doc.ents:
-        if ent.label_ in ["LAW", "ORG", "MISC"]:  # Entities relevant to T&Cs
+        if ent.label_ in ["LAW", "ORG", "MISC", "PRODUCT", "GPE", "DATE", "PERSON", "MONEY", "PERCENT", "NORP", "FAC"]: # Entities relevant to T&Cs
             legal_phrases.add(ent.text)
 
     return list(legal_phrases)
@@ -43,27 +43,33 @@ def preprocess_terms(text, legal_phrases):
     # Join preprocessed sentences
     return '. '.join(preprocessed_sentences)
 
-# Example usage with file reading and writing
-def preprocess_file(input_file):
-    base_name, ext = os.path.splitext(input_file)
-    output_file = f"{base_name}_processed{ext}"
+# Function to process all files in the "DataSet" folder
+def preprocess_folder(folder_path="DataSet"):
+    # Get the path where this script is located
+    script_directory = os.path.dirname(os.path.abspath(__file__))
     
-    # Read input file
-    with open(input_file, 'r', encoding='utf-8') as f:
-        text = f.read()
+    # Iterate through each file in the folder
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".txt"):  # Process only .txt files
+            input_path = os.path.join(folder_path, filename)
+            base_name, ext = os.path.splitext(filename)
+            output_path = os.path.join(script_directory, f"{base_name}_processed{ext}")
+            
+            # Read input file
+            with open(input_path, 'r', encoding='utf-8') as f:
+                text = f.read()
 
-    # Extract legal phrases from the document
-    legal_phrases = extract_legal_phrases(text)
+            # Extract legal phrases from the document
+            legal_phrases = extract_legal_phrases(text)
 
-    # Preprocess using the extracted phrases
-    processed_text = preprocess_terms(text, legal_phrases)
+            # Preprocess using the extracted phrases
+            processed_text = preprocess_terms(text, legal_phrases)
 
-    # Write to the output file
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(processed_text)
+            # Write to the output file
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(processed_text)
 
-    print(f"Preprocessed text saved to {output_file}")
+            print(f"Processed file saved to {output_path}")
 
-# Example document processing
-input_file = 'software_terms_and_conditions.txt'  # Replace with your T&C document path
-preprocess_file("ALCPU_PrivacyPolicy.txt")
+# Process all files in the DataSet folder
+preprocess_folder()
