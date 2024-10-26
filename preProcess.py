@@ -1,18 +1,23 @@
 import os
 import re
 import spacy
+import spacy_transformers
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import sent_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.downloader import download as nltk_download
 
 # Load spaCy model
 nlp = spacy.load("en_core_web_trf")  # Uses transformer-based model for legal language
+
+# Download NLTK resources
+nltk_download('wordnet')
 
 # Initialize lemmatizer
 lemmatizer = WordNetLemmatizer()
 
 def extract_legal_phrases(text):
-    """Automatically extracts legal phrases from text using spaCy and TF-IDF."""
+    # Automatically extracts legal phrases from text using spaCy and TF-IDF.
     doc = nlp(text)
     
     # Step 1: Collect noun chunks and named entities as legal phrases
@@ -52,8 +57,6 @@ def preprocess_folder(folder_path="DataSet"):
     for filename in os.listdir(folder_path):
         if filename.endswith(".txt"):  # Process only .txt files
             input_path = os.path.join(folder_path, filename)
-            base_name, ext = os.path.splitext(filename)
-            output_path = os.path.join(script_directory, f"{base_name}_processed{ext}")
             
             # Read input file
             with open(input_path, 'r', encoding='utf-8') as f:
@@ -66,10 +69,10 @@ def preprocess_folder(folder_path="DataSet"):
             processed_text = preprocess_terms(text, legal_phrases)
 
             # Write to the output file
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(input_path, 'w', encoding='utf-8') as f:
                 f.write(processed_text)
 
-            print(f"Processed file saved to {output_path}")
+            print(f"Processed file saved to {input_path}")
 
 # Process all files in the DataSet folder
 preprocess_folder()
