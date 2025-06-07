@@ -1,169 +1,128 @@
-# Terms of Service Document Classifier
+# 📄 GistTerms - Terms of Service Document Classifier
 
-## Overview
-The Terms of Service Document Classifier is an advanced Natural Language Processing (NLP) project designed to analyze Terms of Service (ToS) documents. It identifies and categorizes sentences based on their content and risk level:
+## 🔍 Overview  
+**GistTerms** is an advanced **Natural Language Processing (NLP)** tool that analyzes Terms of Service (ToS) documents and classifies their contents into meaningful risk categories:
 
-- **Risk**: Statements that could be potentially harmful or unfavorable to the user.
-- **Safe**: Statements that ensure user rights or are considered safe.
-- **Information**: Neutral or informative statements.
+- 🔴 **Risk**: Potentially harmful or unfavorable to the user  
+- 🟢 **Safe**: User-beneficial and protective statements  
+- 🔵 **Information**: Neutral or purely informative content  
 
-This tool grades the overall document based on the number of risky and safe sentences, providing users with an intuitive service grade (A to F) to quickly assess the document.
-
----
-
-## Features
-- **Risk Categorization**: Automatically classifies sentences into Risk, Safe, or Information categories.
-- **Document Grading**: Assigns an overall grade to the document based on risk and safety levels.
-- **Confidence Filtering**: Filters out sentences with low classification confidence to ensure reliability.
-- **Deduplication**: Removes duplicate sentences for accurate analysis.
+💡 The tool also assigns a **grade (A–F)** to the document based on its sentence classifications, making it easier for users to quickly assess service agreements.
 
 ---
 
-## Tech Stack
-- **Programming Languages**: Python
-- **Libraries/Frameworks**:
-  - Natural Language Processing: `nltk`, `transformers`
-  - Machine Learning: `PyTorch`
-- **Pre-trained Model**: [adeeteya/distilbert_base_uncased_finetuned_tos](https://huggingface.co/adeeteya/distilbert_base_uncased_finetuned_tos) (BERT-based model fine-tuned for ToS classification)
-- **Dataset**: [adeeteya/termsofservice](https://huggingface.co/datasets/adeeteya/termsofservice)
-- **Hardware Support**: Supports CUDA for GPU acceleration
+## ✨ Features
+
+- 🚩 **Risk Categorization** – Tags each sentence as **Risk**, **Safe**, or **Information**
+- 🧮 **Document Grading** – Assigns an A–F score based on the ratio of risky to safe content
+- 🧠 **Confidence Filtering** – Ignores low-confidence predictions to improve accuracy
+- ♻️ **Deduplication** – Removes repetitive sentences for clean analysis
 
 ---
 
-## Installation
+## 🛠️ Tech Stack
 
-1. **Clone the repository:**
+- **Language**: Python  
+- **Libraries**:
+  - NLP: `nltk`, `transformers`  
+  - ML: `PyTorch`
+- **Dataset**: [adeeteya/termsofservice](https://huggingface.co/datasets/adeeteya/termsofservice)  
+- **Hardware**: CUDA support for GPU acceleration
+
+---
+
+## 🚀 Installation
+
+1. **Clone the repo**  
    ```bash
-   git clone https://github.com/pallavibakale/CS-59000-NLP-Final-Project.git
-   cd CS-59000-NLP-Final-Project
+   git clone https://github.com/sumedhkumar96/GistTerms.git
+   cd GistTerms
    ```
 
-2. **Set up a virtual environment:**
+2. **Create virtual environment**  
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate     # On Windows: venv\Scripts\activate
    ```
 
-3. **Install the required dependencies:**
+3. **Install dependencies**  
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Download the NLTK tokenizer:**
+4. **Download NLTK tokenizer**  
    ```bash
    python -m nltk.downloader punkt
    ```
 
 ---
 
-## Usage
+## 🧪 Usage
 
-1. **Prepare the input document:**
-   Ensure the ToS document is in `.txt` format and named `input.txt`.
+1. **Add your ToS document**  
+   - Save your `.txt` file as `input.txt` in the project directory
 
-2. **Run the classifier:**
+2. **Run the classifier**  
    ```bash
    python final_program.py
    ```
 
-3. **View the output:**
-   The script will:
-   - Print the categorized sentences (Risk, Safe, Information) with their confidence scores.
-   - Display the overall grade of the document based on its risk level.
-
-   Example output:
+3. **Get results in terminal**  
+   Example output:  
    ```plaintext
    Classified Sentences:
 
-   Risk:
+   🔴 Risk:
      - "The service reserves the right to terminate accounts without notice." (Confidence: 0.85)
 
-   Safe:
+   🟢 Safe:
      - "Users can request data deletion at any time." (Confidence: 0.90)
 
-   Information:
+   🔵 Information:
      - "The service uses cookies to improve functionality." (Confidence: 0.75)
 
-   Service Grade: B
+   🏅 Service Grade: B
    ```
 
 ---
 
-## Alternate Usage
+## ⚙️ How It Works
 
-### Use the Model Directly
-
-#### Using a Pipeline Helper
-```python
-from transformers import pipeline
-
-pipe = pipeline("text-classification", model="adeeteya/distilbert_base_uncased_finetuned_tos")
-result = pipe("Your sentence here.")
-print(result)
-```
-
-#### Loading the Model and Tokenizer
-```python
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
-tokenizer = AutoTokenizer.from_pretrained("adeeteya/distilbert_base_uncased_finetuned_tos")
-model = AutoModelForSequenceClassification.from_pretrained("adeeteya/distilbert_base_uncased_finetuned_tos")
-
-inputs = tokenizer("Your sentence here.", return_tensors="pt")
-outputs = model(**inputs)
-print(outputs)
-```
+1. **Sentence Tokenization** – Splits input using NLTK  
+2. **Preprocessing** – Tokenizes and formats sentences for model input  
+3. **Classification** – Uses fine-tuned BERT to categorize content  
+4. **Grading** – Computes document grade based on sentence types  
 
 ---
 
-## How It Works
+## 🛤️ Roadmap
 
-1. **Sentence Tokenization**: The document is split into individual sentences using NLTK's tokenizer.
-2. **Preprocessing**: Each sentence is tokenized and prepared for the BERT model.
-3. **Classification**: Sentences are classified into Risk, Safe, or Information categories based on the fine-tuned BERT model.
-4. **Grading**: The document is graded based on the count of Risk and Safe sentences.
-
----
-
-## Roadmap
-- [ ] Develop a user-friendly web interface for document uploads and visual results.
-- [ ] Add support for additional file formats (e.g., PDF, DOCX).
-- [ ] Improve classification accuracy by fine-tuning with larger datasets.
-- [ ] Integrate real-time feedback for model improvements.
+- [ ] 🌐 Build a web UI for document upload and visual results  
+- [ ] 📄 Add support for PDF and DOCX formats  
+- [ ] 🤖 Improve accuracy via larger datasets  
+- [ ] 📊 Integrate feedback system for live improvements  
 
 ---
 
-## Contributing
-Contributions are welcome! Please follow these steps:
+## 🤝 Contributing
 
-1. Fork the repository.
-2. Create a feature branch.
+We welcome contributions!  
+
+1. Fork the repo  
+2. Create a new branch  
    ```bash
    git checkout -b feature-name
    ```
-3. Commit your changes.
+3. Commit your changes  
    ```bash
    git commit -m "Add new feature"
    ```
-4. Push to the branch.
+4. Push and open a PR  
    ```bash
    git push origin feature-name
    ```
-5. Create a pull request.
 
 ---
 
-## License
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## Contact
-**Aditya Ramesh**  
-[Email](mailto:adeeteya@gmail.com) | [GitHub](https://github.com/adeeteya)
-
-**Sumedh Kumar**  
-[Email](mailto:sumedhkumar96@gmail.com) | [GitHub](https://github.com/sumedhkumar96)
-
-**Pallavi Bakale**  
-[Email](mailto:pallavib0996@gmail.com) | [GitHub](https://github.com/pallavibakale)
+## 📜 License  
+Licensed under the [MIT License](LICENSE).
