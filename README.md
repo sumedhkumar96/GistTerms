@@ -123,6 +123,3 @@ We welcome contributions!
    ```
 
 ---
-
-## 📜 License  
-Licensed under the [MIT License](LICENSE).
